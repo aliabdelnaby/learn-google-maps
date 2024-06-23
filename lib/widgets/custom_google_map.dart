@@ -30,7 +30,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       // street view 13 -> 17
       // building view 18 -> 20
     );
-
+    initMarkers();
     super.initState();
   }
 
@@ -61,5 +61,16 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         .loadString('assets/map_styles/night_map_style.json');
 
     mapController?.setMapStyle(nightMapStyle);
+  }
+
+  void initMarkers() {
+    var myMarker = const Marker(
+      markerId: MarkerId('marker_1'),
+      position: LatLng(
+        30.043916081931524,
+        31.235197105241596,
+      ),
+    );
+    markers.add(myMarker);
   }
 }
