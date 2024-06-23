@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_with_google_maps/models/place_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -68,6 +70,9 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           (placeModel) => Marker(
             markerId: MarkerId(placeModel.id.toString()),
             position: placeModel.latLng,
+            infoWindow: InfoWindow(
+              title: placeModel.name,
+            ),
           ),
         )
         .toSet();
