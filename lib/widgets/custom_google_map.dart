@@ -1,6 +1,7 @@
-// ignore_for_file: deprecated_member_use
-
+// ignore_for_file: deprecated_member_use, unused_local_variable
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_with_google_maps/models/place_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -64,12 +65,30 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     mapController?.setMapStyle(nightMapStyle);
   }
 
-  void initMarkers() {
+  Future<Uint8List> getAssetImageFromRawData(String image, double width) async {
+    var imageData = await rootBundle.load(image);
+    var imageCodec = await ui.instantiateImageCodec(
+      imageData.buffer.asUint8List(),
+      targetWidth: width.round(),
+    );
+    var imageFrame = await imageCodec.getNextFrame();
+    var imageByteData =
+        await imageFrame.image.toByteData(format: ui.ImageByteFormat.png);
+    return imageByteData!.buffer.asUint8List();
+  }
+
+  void initMarkers() async {
+    var customMarkerIcon = BitmapDescriptor.bytes(
+      await getAssetImageFromRawData("assetImage", 100),
+    );
+
     var myMarkers = places
         .map(
           (placeModel) => Marker(
-            markerId: MarkerId(placeModel.id.toString()),
-            icon: BitmapDescriptor.defaultMarker,
+            markerId: MarkerId(
+              placeModel.id.toString(),
+            ),
+            // icon: customMarkerIcon,
             position: placeModel.latLng,
             infoWindow: InfoWindow(
               title: placeModel.name,
@@ -78,5 +97,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         )
         .toSet();
     markers.addAll(myMarkers);
+    setState(() {});
   }
 }
