@@ -47,6 +47,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     return Stack(
       children: [
         GoogleMap(
+          zoomControlsEnabled: false,
           markers: markers,
           initialCameraPosition: initialCameraPosition,
           onMapCreated: (controller) {
