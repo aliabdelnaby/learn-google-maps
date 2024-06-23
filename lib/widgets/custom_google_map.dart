@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -11,6 +13,7 @@ class CustomGoogleMap extends StatefulWidget {
 class _CustomGoogleMapState extends State<CustomGoogleMap> {
   late CameraPosition initialCameraPosition;
   late GoogleMapController? mapController;
+  late Set<Marker> markers = {};
 
   @override
   void initState() {
@@ -27,6 +30,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       // street view 13 -> 17
       // building view 18 -> 20
     );
+
     super.initState();
   }
 
@@ -41,6 +45,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     return Stack(
       children: [
         GoogleMap(
+          markers: markers,
           initialCameraPosition: initialCameraPosition,
           onMapCreated: (controller) {
             mapController = controller;
