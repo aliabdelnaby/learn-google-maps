@@ -41,47 +41,20 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     return Stack(
       children: [
         GoogleMap(
-          mapType: MapType.normal,
           initialCameraPosition: initialCameraPosition,
-          // cameraTargetBounds: CameraTargetBounds(
-          //   LatLngBounds(
-          //     southwest: const LatLng(
-          //       30.03737748732558,
-          //       31.23417640063827,
-          //     ),
-          //     northeast: const LatLng(
-          //       30.08967415776431,
-          //       31.260918861245514,
-          //     ),
-          //   ),
-          // ),
           onMapCreated: (controller) {
             mapController = controller;
+            initMapStyles();
           },
-        ),
-        Positioned(
-          bottom: 16,
-          left: 16,
-          right: 16,
-          child: ElevatedButton(
-            onPressed: () {
-              CameraPosition newCameraPosition = const CameraPosition(
-                target: LatLng(
-                  30.068652804045982,
-                  31.40810446504568,
-                ),
-                zoom: 11,
-              );
-              mapController?.animateCamera(
-                CameraUpdate.newCameraPosition(
-                  newCameraPosition,
-                ),
-              );
-            },
-            child: const Text('Change location'),
-          ),
         ),
       ],
     );
+  }
+
+  void initMapStyles() async {
+    var nightMapStyle = await DefaultAssetBundle.of(context)
+        .loadString('assets/map_styles/night_map_style.json');
+
+    mapController?.setMapStyle(nightMapStyle);
   }
 }
