@@ -69,6 +69,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         .map(
           (placeModel) => Marker(
             markerId: MarkerId(placeModel.id.toString()),
+            icon: BitmapDescriptor.defaultMarker,
             position: placeModel.latLng,
             infoWindow: InfoWindow(
               title: placeModel.name,
