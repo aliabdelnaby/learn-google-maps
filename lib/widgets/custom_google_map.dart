@@ -16,6 +16,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   late CameraPosition initialCameraPosition;
   late GoogleMapController? mapController;
   late Set<Marker> markers = {};
+  late Set<Polyline> polyLines = {};
 
   @override
   void initState() {
@@ -33,6 +34,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       // building view 18 -> 20
     );
     initMarkers();
+    initPolyLines();
     super.initState();
   }
 
@@ -47,6 +49,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     return Stack(
       children: [
         GoogleMap(
+          polylines: polyLines,
           zoomControlsEnabled: false,
           markers: markers,
           initialCameraPosition: initialCameraPosition,
@@ -79,9 +82,9 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   }
 
   void initMarkers() async {
-    var customMarkerIcon = BitmapDescriptor.bytes(
-      await getAssetImageFromRawData("assetImage", 100),
-    );
+    // var customMarkerIcon = BitmapDescriptor.bytes(
+    //   await getAssetImageFromRawData("assetImage", 100),
+    // );
 
     var myMarkers = places
         .map(
@@ -99,5 +102,38 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         .toSet();
     markers.addAll(myMarkers);
     setState(() {});
+  }
+
+  void initPolyLines() {
+    Polyline polyline = const Polyline(
+      polylineId: PolylineId("1"),
+      color: Colors.blue,
+      zIndex: 1,
+      startCap: Cap.roundCap,
+      width: 5,
+      points: [
+        LatLng(30.043916081931524, 31.235197105241596),
+        LatLng(30.047965841266443, 31.241785372494817),
+        LatLng(30.055916191301712, 31.24713551428398),
+        LatLng(30.05342408127319, 31.26085898488362),
+      ],
+    );
+    Polyline polyline2 = const Polyline(
+      polylineId: PolylineId("2"),
+      color: Colors.red,
+      
+      patterns: [
+        PatternItem.dot,
+      ],
+      startCap: Cap.roundCap,
+      width: 5,
+      points: [
+        LatLng(30.055916194501892, 31.24713558928311),
+        LatLng(30.05342406927378, 31.26081478488336),
+      ],
+    );
+
+    polyLines.add(polyline);
+    polyLines.add(polyline2);
   }
 }
