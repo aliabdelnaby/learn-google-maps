@@ -80,6 +80,9 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   }
 
   Future<void> getCurrentLocationData() async {
+    await location.changeSettings(
+      distanceFilter: 2,
+    );
     location.onLocationChanged.listen(
       (locationData) {
         var myLocationMarker = Marker(
@@ -90,9 +93,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
           ),
         );
         markers.add(myLocationMarker);
-        setState(() {
-          
-        });
+        setState(() {});
         mapController?.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
