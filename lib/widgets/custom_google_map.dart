@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 class CustomGoogleMap extends StatefulWidget {
   const CustomGoogleMap({super.key});
@@ -12,7 +13,7 @@ class CustomGoogleMap extends StatefulWidget {
 class _CustomGoogleMapState extends State<CustomGoogleMap> {
   late CameraPosition initialCameraPosition;
   late GoogleMapController? mapController;
-  late Set<Circle> circles = {};
+  late Location location;
 
   @override
   void initState() {
@@ -23,8 +24,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       ),
       zoom: 11,
     );
-
-    initCircles();
+    location = Location();
+    checkAndRequestLocationPermission();
     super.initState();
   }
 
@@ -37,7 +38,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
-      circles: circles,
       zoomControlsEnabled: false,
       initialCameraPosition: initialCameraPosition,
       onMapCreated: (controller) {
@@ -54,15 +54,16 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     mapController?.setMapStyle(nightMapStyle);
   }
 
-  void initCircles() {
-    Circle circle = Circle(
-      circleId: const CircleId('1'),
-      center: const LatLng(30.043916081931524, 31.235197105241596),
-      radius: 1000,
-      strokeWidth: 3,
-      fillColor: Colors.black.withOpacity(0.5),
-    );
-    circles.add(circle);
+  void checkAndRequestLocationPermission() async {
+    var isServiceEnabled = await location.serviceEnabled();
+
+    if (!isServiceEnabled) {
+      isServiceEnabled = await location.requestService();
+      if (!isServiceEnabled) {
+        //* 
+        return;
+      }
+    }
   }
 }
 
