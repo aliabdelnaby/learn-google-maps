@@ -1,8 +1,5 @@
-// ignore_for_file: deprecated_member_use, unused_local_variable
-import 'dart:ui' as ui;
+// ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_with_google_maps/models/place_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CustomGoogleMap extends StatefulWidget {
@@ -15,8 +12,7 @@ class CustomGoogleMap extends StatefulWidget {
 class _CustomGoogleMapState extends State<CustomGoogleMap> {
   late CameraPosition initialCameraPosition;
   late GoogleMapController? mapController;
-  late Set<Marker> markers = {};
-  late Set<Polyline> polyLines = {};
+  late Set<Polygon> polygons = {};
 
   @override
   void initState() {
@@ -26,15 +22,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
         31.235197105241596,
       ),
       zoom: 11,
-      //! Zoom Levels
-      // world view 0 -> 3
-      // country view 4 -> 6
-      // city view 10 -> 12
-      // street view 13 -> 17
-      // building view 18 -> 20
     );
-    initMarkers();
-    initPolyLines();
+    initPolygons();
     super.initState();
   }
 
@@ -49,9 +38,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     return Stack(
       children: [
         GoogleMap(
-          polylines: polyLines,
+          polygons: polygons,
           zoomControlsEnabled: false,
-          markers: markers,
           initialCameraPosition: initialCameraPosition,
           onMapCreated: (controller) {
             mapController = controller;
@@ -69,71 +57,26 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     mapController?.setMapStyle(nightMapStyle);
   }
 
-  Future<Uint8List> getAssetImageFromRawData(String image, double width) async {
-    var imageData = await rootBundle.load(image);
-    var imageCodec = await ui.instantiateImageCodec(
-      imageData.buffer.asUint8List(),
-      targetWidth: width.round(),
-    );
-    var imageFrame = await imageCodec.getNextFrame();
-    var imageByteData =
-        await imageFrame.image.toByteData(format: ui.ImageByteFormat.png);
-    return imageByteData!.buffer.asUint8List();
-  }
-
-  void initMarkers() async {
-    // var customMarkerIcon = BitmapDescriptor.bytes(
-    //   await getAssetImageFromRawData("assetImage", 100),
-    // );
-
-    var myMarkers = places
-        .map(
-          (placeModel) => Marker(
-            markerId: MarkerId(
-              placeModel.id.toString(),
-            ),
-            // icon: customMarkerIcon,
-            position: placeModel.latLng,
-            infoWindow: InfoWindow(
-              title: placeModel.name,
-            ),
-          ),
-        )
-        .toSet();
-    markers.addAll(myMarkers);
-    setState(() {});
-  }
-
-  void initPolyLines() {
-    Polyline polyline = const Polyline(
-      polylineId: PolylineId("1"),
-      color: Colors.blue,
-      zIndex: 1,
-      startCap: Cap.roundCap,
-      width: 5,
-      points: [
-        LatLng(30.043916081931524, 31.235197105241596),
-        LatLng(30.047965841266443, 31.241785372494817),
-        LatLng(30.055916191301712, 31.24713551428398),
-        LatLng(30.05342408127319, 31.26085898488362),
+  void initPolygons() {
+    Polygon polygon = Polygon(
+      polygonId: const PolygonId('1'),
+      points: const [
+        LatLng(30.085924655200753, 31.18379246833647),
+        LatLng(30.089043824749577, 31.315113415158343),
+        LatLng(30.014007972860085, 31.315628399263527),
+        LatLng(30.027830726736987, 31.17520939991674),
       ],
-    );
-    Polyline polyline2 = const Polyline(
-      polylineId: PolylineId("2"),
-      color: Colors.red,
-      
-      patterns: [
-        PatternItem.dot,
-      ],
-      startCap: Cap.roundCap,
-      width: 5,
-      points: [
-        LatLng(30.055916194501892, 31.24713558928311),
-        LatLng(30.05342406927378, 31.26081478488336),
-      ],
+      fillColor: Colors.blue.shade100,
+      strokeWidth: 3,
     );
 
-    polyLines.add(polyline);
-    polyLines.add(polyline2);
+    polygons.add(polygon);
   }
 }
+
+  //! Zoom Levels
+  // world view 0 -> 3
+  // country view 4 -> 6
+  // city view 10 -> 12
+  // street view 13 -> 17
+  // building view 18 -> 20
