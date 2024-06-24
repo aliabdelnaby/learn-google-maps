@@ -60,6 +60,14 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   void initPolygons() {
     Polygon polygon = Polygon(
       polygonId: const PolygonId('1'),
+      holes: const [
+        [
+          LatLng(30.04934675961009, 31.230246945313542),
+          LatLng(30.035081175766287, 31.23290769652366),
+          LatLng(30.041768423959425, 31.247756404889792),
+          LatLng(30.06227317040862, 31.25264875388904),
+        ],
+      ],
       points: const [
         LatLng(30.085924655200753, 31.18379246833647),
         LatLng(30.089043824749577, 31.315113415158343),
@@ -74,9 +82,9 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   }
 }
 
-  //! Zoom Levels
-  // world view 0 -> 3
-  // country view 4 -> 6
-  // city view 10 -> 12
-  // street view 13 -> 17
-  // building view 18 -> 20
+//! Zoom Levels
+// world view 0 -> 3
+// country view 4 -> 6
+// city view 10 -> 12
+// street view 13 -> 17
+// building view 18 -> 20
