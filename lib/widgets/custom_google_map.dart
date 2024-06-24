@@ -12,7 +12,7 @@ class CustomGoogleMap extends StatefulWidget {
 
 class _CustomGoogleMapState extends State<CustomGoogleMap> {
   late CameraPosition initialCameraPosition;
-  late GoogleMapController? mapController;
+  GoogleMapController? mapController;
   late Location location;
 
   @override
@@ -48,7 +48,7 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     var nightMapStyle = await DefaultAssetBundle.of(context)
         .loadString('assets/map_styles/night_map_style.json');
 
-    mapController?.setMapStyle(nightMapStyle);
+    mapController!.setMapStyle(nightMapStyle);
   }
 
   Future<void> checkAndRequestLocationService() async {
@@ -78,7 +78,21 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   }
 
   Future<void> getCurrentLocationData() async {
-    location.onLocationChanged.listen((locationData) {});
+    location.onLocationChanged.listen(
+      (locationData) {
+        mapController?.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: LatLng(
+                locationData.latitude!,
+                locationData.longitude!,
+              ),
+              zoom: 17,
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void updateMyLocation() async {
