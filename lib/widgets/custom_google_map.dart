@@ -12,7 +12,7 @@ class CustomGoogleMap extends StatefulWidget {
 class _CustomGoogleMapState extends State<CustomGoogleMap> {
   late CameraPosition initialCameraPosition;
   late GoogleMapController? mapController;
-  late Set<Polygon> polygons = {};
+  late Set<Circle> circles = {};
 
   @override
   void initState() {
@@ -23,7 +23,8 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
       ),
       zoom: 11,
     );
-    initPolygons();
+
+    initCircles();
     super.initState();
   }
 
@@ -35,18 +36,14 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        GoogleMap(
-          polygons: polygons,
-          zoomControlsEnabled: false,
-          initialCameraPosition: initialCameraPosition,
-          onMapCreated: (controller) {
-            mapController = controller;
-            initMapStyles();
-          },
-        ),
-      ],
+    return GoogleMap(
+      circles: circles,
+      zoomControlsEnabled: false,
+      initialCameraPosition: initialCameraPosition,
+      onMapCreated: (controller) {
+        mapController = controller;
+        initMapStyles();
+      },
     );
   }
 
@@ -57,28 +54,15 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
     mapController?.setMapStyle(nightMapStyle);
   }
 
-  void initPolygons() {
-    Polygon polygon = Polygon(
-      polygonId: const PolygonId('1'),
-      holes: const [
-        [
-          LatLng(30.04934675961009, 31.230246945313542),
-          LatLng(30.035081175766287, 31.23290769652366),
-          LatLng(30.041768423959425, 31.247756404889792),
-          LatLng(30.06227317040862, 31.25264875388904),
-        ],
-      ],
-      points: const [
-        LatLng(30.085924655200753, 31.18379246833647),
-        LatLng(30.089043824749577, 31.315113415158343),
-        LatLng(30.014007972860085, 31.315628399263527),
-        LatLng(30.027830726736987, 31.17520939991674),
-      ],
-      fillColor: Colors.blue.shade100,
+  void initCircles() {
+    Circle circle = Circle(
+      circleId: const CircleId('1'),
+      center: const LatLng(30.043916081931524, 31.235197105241596),
+      radius: 1000,
       strokeWidth: 3,
+      fillColor: Colors.black.withOpacity(0.5),
     );
-
-    polygons.add(polygon);
+    circles.add(circle);
   }
 }
 
